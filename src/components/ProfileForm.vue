@@ -20,6 +20,24 @@
           />
           <label for="tags">Метки</label>
         </ifta-label>
+      </div>
+      <div class="flex flex-col gap-1">
+        <ifta-label>
+          <p-select id="type" name="type" :options="['LSAP', 'Локальная']" class="w-40" />
+          <label for="type">Тип записи</label>
+        </ifta-label>
+      </div>
+      <div class="flex flex-col gap-1">
+        <ifta-label>
+          <InputText
+            name="login"
+            type="text"
+            placeholder="Значение"
+            :formControl="{ validateOnBlur: true }"
+            @blur="console.log('blur')"
+          />
+          <label for="login">Логин</label>
+        </ifta-label>
 
         <Message v-if="$form.login?.invalid" severity="error" size="small" variant="simple">
           {{ $form.login.error?.message }}
@@ -27,44 +45,19 @@
       </div>
       <div class="flex flex-col gap-1">
         <ifta-label>
-          <p-select
-            id="type"
-            name="type"
-            :options="['LSAP', 'Локальная']"
-            :formControl="{ validateOnValueUpdate: true }"
-            class="w-40"
+          <password
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Значение"
+            :feedback="false"
           />
-          <label for="type">Тип записи</label>
-        </ifta-label>
-
-        <Message v-if="$form.login?.invalid" severity="error" size="small" variant="simple">{{
-          $form.login.error?.message
-        }}</Message>
-      </div>
-      <div class="flex flex-col gap-1">
-        <ifta-label>
-          <InputText
-            name="login"
-            type="text"
-            placeholder="Login"
-            :formControl="{ validateOnBlur: true }"
-          />
-          <label for="login">Логин</label>
-        </ifta-label>
-
-        <Message v-if="$form.login?.invalid" severity="error" size="small" variant="simple">{{
-          $form.login.error?.message
-        }}</Message>
-      </div>
-      <div class="flex flex-col gap-1">
-        <ifta-label>
-          <password input-id="password" name="password" type="password" :feedback="false" />
           <label for="password">Пароль</label>
         </ifta-label>
 
-        <Message v-if="$form.login?.invalid" severity="error" size="small" variant="simple">{{
-          $form.login.error?.message
-        }}</Message>
+        <Message v-if="$form.password?.invalid" severity="error" size="small" variant="simple">
+          {{ $form.password.error?.message }}
+        </Message>
       </div>
       <p-button type="submit">submit</p-button>
       <div>
@@ -80,7 +73,6 @@ import type { Profile } from '@/models'
 import type { FormSubmitEvent } from '@primevue/forms/form'
 import { useToast } from 'primevue/usetoast'
 
-// const $form = reactive({})
 interface ProfileForm extends Omit<Profile, 'password' | 'tags'> {
   password: string
   tags: string
@@ -103,12 +95,18 @@ const data = reactive<ProfileForm>({
 })
 
 const resolver = ({ values }: { values: ProfileForm }) => {
+  console.log('resolver', values)
   const errors: Record<string, { message: string }[]> = {}
+
+  if (!values.password) {
+    errors.password = [{ message: 'Password is required.' }]
+  }
 
   if (!values.login) {
     errors.login = [{ message: 'Login is required.' }]
   }
 
+  console.log('errors', errors)
   return {
     values, // (Optional) Used to pass current form values to submit event.
     errors,
