@@ -94,7 +94,6 @@ const data = reactive<ProfileForm>({
 })
 
 const resolver = ({ values }: { values: ProfileForm }) => {
-  // console.log('resolver', values)
   const errors: Record<string, { message: string }[]> = {}
 
   if (!values.password) {
@@ -105,17 +104,14 @@ const resolver = ({ values }: { values: ProfileForm }) => {
     errors.login = [{ message: 'Логин обязателен.' }]
   }
 
-  // console.log('errors', errors)
-  return {
-    values, // (Optional) Used to pass current form values to submit event.
-    errors,
-  }
+  return { values, errors }
 }
 
 const onFormSubmit = (e: FormSubmitEvent) => {
   console.log('raw submit')
-  if (e.valid) {
-    console.log('%c success submit', 'color: green')
-  }
+
+  if (!e.valid) return
+
+  console.log('%c success submit', 'color: green')
 }
 </script>
