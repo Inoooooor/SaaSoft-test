@@ -1,4 +1,4 @@
-interface Profile {
+export interface Profile {
   tags: string[]
   type: string
   login: string

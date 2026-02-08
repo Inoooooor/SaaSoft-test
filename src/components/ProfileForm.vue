@@ -1,20 +1,31 @@
 <template>
-  <div class="card flex justify-center">
+  <div class="card flex">
     <Toast />
 
     <Form
       v-slot="$form"
-      :initialValues
-      :resolver
+      :initial-values="initialValues"
+      :resolver="resolver"
       @submit="onFormSubmit"
-      class="flex flex-col gap-4 w-full sm:w-56"
+      class="flex gap-4 w-full sm:w-56"
     >
       <div class="flex flex-col gap-1">
-        <InputText name="username" type="text" placeholder="Username" />
-        <InputText name="password" type="text" placeholder="Username" />
+        <InputText
+          name="login"
+          type="text"
+          placeholder="Login"
+          :formControl="{ validateOnBlur: true }"
+        />
 
-        <Message v-if="$form.username?.invalid" severity="error" size="small" variant="simple">{{
-          $form.username.error?.message
+        <Message v-if="$form.login?.invalid" severity="error" size="small" variant="simple">{{
+          $form.login.error?.message
+        }}</Message>
+      </div>
+      <div class="flex flex-col gap-1">
+        <InputText name="login" type="text" placeholder="Login" />
+
+        <Message v-if="$form.login?.invalid" severity="error" size="small" variant="simple">{{
+          $form.login.error?.message
         }}</Message>
       </div>
       <Button type="submit" severity="secondary" label="Submit" />
@@ -22,21 +33,26 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { reactive } from 'vue'
+import type { Profile } from '@/models'
 import { useToast } from 'primevue/usetoast'
+
+interface ProfileForm extends Omit<Profile, 'password'> {
+  password: string
+}
 
 const toast = useToast()
 
 const initialValues = reactive({
-  username: '',
+  login: '',
 })
 
-const resolver = ({ values }) => {
-  const errors = {}
+const resolver = ({ values }: { values: ProfileForm }) => {
+  const errors: Record<string, { message: string }[]> = {}
 
-  if (!values.username) {
-    errors.username = [{ message: 'Username is required.' }]
+  if (!values.login) {
+    errors.login = [{ message: 'Login is required.' }]
   }
 
   return {
@@ -45,7 +61,7 @@ const resolver = ({ values }) => {
   }
 }
 
-const onFormSubmit = ({ valid }) => {
+const onFormSubmit = ({ valid }: { valid: boolean }) => {
   if (valid) {
     toast.add({
       severity: 'success',
