@@ -7,46 +7,65 @@
       :initial-values="initialValues"
       :resolver="resolver"
       @submit="onFormSubmit"
-      class="flex gap-4 bg-black"
+      class="flex gap-4 bg-gray-200"
     >
       <div class="flex flex-col gap-1">
-        <InputText
-          name="tags"
-          type="text"
-          placeholder="Метки"
-          :formControl="{ validateOnBlur: true }"
-        />
+        <ifta-label>
+          <InputText
+            id="tags"
+            name="tags"
+            type="text"
+            placeholder="XXX;MMM;YYY;III"
+            :formControl="{ validateOnBlur: true }"
+          />
+          <label for="tags">Метки</label>
+        </ifta-label>
+
+        <Message v-if="$form.login?.invalid" severity="error" size="small" variant="simple">
+          {{ $form.login.error?.message }}
+        </Message>
+      </div>
+      <div class="flex flex-col gap-1">
+        <ifta-label>
+          <p-select
+            id="profileType"
+            name="profileType"
+            :options="['LSAP', 'Локальная']"
+            :formControl="{ validateOnValueUpdate: true }"
+            class="w-40"
+          />
+          <label for="profileType">Тип записи</label>
+        </ifta-label>
 
         <Message v-if="$form.login?.invalid" severity="error" size="small" variant="simple">{{
           $form.login.error?.message
         }}</Message>
       </div>
       <div class="flex flex-col gap-1">
-        <p-select name="login" type="text" placeholder="Login" />
+        <ifta-label>
+          <InputText
+            name="login"
+            type="text"
+            placeholder="Login"
+            :formControl="{ validateOnBlur: true }"
+          />
+          <label for="login">Логин</label>
+        </ifta-label>
 
         <Message v-if="$form.login?.invalid" severity="error" size="small" variant="simple">{{
           $form.login.error?.message
         }}</Message>
       </div>
       <div class="flex flex-col gap-1">
-        <InputText
-          name="login"
-          type="text"
-          placeholder="Login"
-          :formControl="{ validateOnBlur: true }"
-        />
-
-        <Message v-if="$form.login?.invalid" severity="error" size="small" variant="simple">{{
-          $form.login.error?.message
-        }}</Message>
-      </div>
-      <div class="flex flex-col gap-1">
-        <InputText
-          name="password"
-          type="password"
-          placeholder="Пароль"
-          :formControl="{ validateOnBlur: true }"
-        />
+        <ifta-label>
+          <label for="password">Пароль</label>
+          <InputText
+            name="password"
+            type="password"
+            placeholder="Пароль"
+            :formControl="{ validateOnBlur: true }"
+          />
+        </ifta-label>
 
         <Message v-if="$form.login?.invalid" severity="error" size="small" variant="simple">{{
           $form.login.error?.message
