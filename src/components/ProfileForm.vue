@@ -8,16 +8,11 @@
       :resolver="resolver"
       @submit="onFormSubmit"
       class="flex gap-4 bg-gray-200"
+      :validateOnBlur="true"
     >
       <div class="flex flex-col gap-1">
         <ifta-label>
-          <InputText
-            id="tags"
-            name="tags"
-            type="text"
-            placeholder="XXX;MMM;YYY;III"
-            :formControl="{ validateOnBlur: true }"
-          />
+          <InputText id="tags" name="tags" type="text" placeholder="XXX;MMM;YYY;III" />
           <label for="tags">Метки</label>
         </ifta-label>
       </div>
@@ -29,13 +24,7 @@
       </div>
       <div class="flex flex-col gap-1">
         <ifta-label>
-          <InputText
-            name="login"
-            type="text"
-            placeholder="Значение"
-            :formControl="{ validateOnBlur: true }"
-            @blur="console.log('blur')"
-          />
+          <InputText name="login" type="text" placeholder="Значение" @blur="console.log('blur')" />
           <label for="login">Логин</label>
         </ifta-label>
 
@@ -99,11 +88,11 @@ const resolver = ({ values }: { values: ProfileForm }) => {
   const errors: Record<string, { message: string }[]> = {}
 
   if (!values.password) {
-    errors.password = [{ message: 'Password is required.' }]
+    errors.password = [{ message: 'Пароль обязателен.' }]
   }
 
   if (!values.login) {
-    errors.login = [{ message: 'Login is required.' }]
+    errors.login = [{ message: 'Логин обязателен.' }]
   }
 
   console.log('errors', errors)
