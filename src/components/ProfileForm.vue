@@ -1,8 +1,7 @@
 <template>
   <div class="card flex">
-    <Toast />
-
     <Form
+      ref="formHtml"
       v-slot="$form"
       :initial-values="initialValues"
       :resolver="resolver"
@@ -12,19 +11,31 @@
     >
       <div class="flex flex-col gap-1">
         <ifta-label>
-          <InputText id="tags" name="tags" type="text" placeholder="XXX;MMM;YYY;III" />
+          <input-text
+            id="tags"
+            name="tags"
+            type="text"
+            placeholder="XXX;MMM;YYY;III"
+            @blur="$formHtml?.submit()"
+          />
           <label for="tags">Метки</label>
         </ifta-label>
       </div>
       <div class="flex flex-col gap-1">
         <ifta-label>
-          <p-select id="type" name="type" :options="['LSAP', 'Локальная']" class="w-40" />
+          <p-select
+            id="type"
+            name="type"
+            :options="['LSAP', 'Локальная']"
+            class="w-40"
+            @blur="$formHtml?.submit()"
+          />
           <label for="type">Тип записи</label>
         </ifta-label>
       </div>
       <div class="flex flex-col gap-1">
         <ifta-label>
-          <InputText name="login" type="text" placeholder="Значение" @blur="console.log('blur')" />
+          <input-text name="login" type="text" placeholder="Значение" @blur="$formHtml?.submit()" />
           <label for="login">Логин</label>
         </ifta-label>
 
@@ -40,6 +51,7 @@
             type="password"
             placeholder="Значение"
             :feedback="false"
+            @blur="$formHtml?.submit()"
           />
           <label for="password">Пароль</label>
         </ifta-label>
@@ -48,7 +60,6 @@
           {{ $form.password.error?.message }}
         </Message>
       </div>
-      <p-button type="submit">submit</p-button>
       <div>
         <pre> form: {{ $form }}</pre>
       </div>
@@ -57,17 +68,16 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, useTemplateRef } from 'vue'
 import type { Profile } from '@/models'
 import type { FormSubmitEvent } from '@primevue/forms/form'
-import { useToast } from 'primevue/usetoast'
 
 interface ProfileForm extends Omit<Profile, 'password' | 'tags'> {
   password: string
   tags: string
 }
 
-const toast = useToast()
+const $formHtml = useTemplateRef<HTMLFormElement>('formHtml')
 
 const initialValues = reactive<ProfileForm>({
   tags: '',
@@ -84,7 +94,7 @@ const data = reactive<ProfileForm>({
 })
 
 const resolver = ({ values }: { values: ProfileForm }) => {
-  console.log('resolver', values)
+  // console.log('resolver', values)
   const errors: Record<string, { message: string }[]> = {}
 
   if (!values.password) {
@@ -95,7 +105,7 @@ const resolver = ({ values }: { values: ProfileForm }) => {
     errors.login = [{ message: 'Логин обязателен.' }]
   }
 
-  console.log('errors', errors)
+  // console.log('errors', errors)
   return {
     values, // (Optional) Used to pass current form values to submit event.
     errors,
@@ -103,13 +113,9 @@ const resolver = ({ values }: { values: ProfileForm }) => {
 }
 
 const onFormSubmit = (e: FormSubmitEvent) => {
-  console.log(e)
+  console.log('raw submit')
   if (e.valid) {
-    toast.add({
-      severity: 'success',
-      summary: 'Form is submitted.',
-      life: 3000,
-    })
+    console.log('%c success submit', 'color: green')
   }
 }
 </script>
