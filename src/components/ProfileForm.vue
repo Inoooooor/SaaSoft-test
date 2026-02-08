@@ -7,8 +7,27 @@
       :initial-values="initialValues"
       :resolver="resolver"
       @submit="onFormSubmit"
-      class="flex gap-4 w-full sm:w-56"
+      class="flex gap-4 bg-black"
     >
+      <div class="flex flex-col gap-1">
+        <InputText
+          name="tags"
+          type="text"
+          placeholder="Метки"
+          :formControl="{ validateOnBlur: true }"
+        />
+
+        <Message v-if="$form.login?.invalid" severity="error" size="small" variant="simple">{{
+          $form.login.error?.message
+        }}</Message>
+      </div>
+      <div class="flex flex-col gap-1">
+        <p-select name="login" type="text" placeholder="Login" />
+
+        <Message v-if="$form.login?.invalid" severity="error" size="small" variant="simple">{{
+          $form.login.error?.message
+        }}</Message>
+      </div>
       <div class="flex flex-col gap-1">
         <InputText
           name="login"
@@ -22,13 +41,17 @@
         }}</Message>
       </div>
       <div class="flex flex-col gap-1">
-        <InputText name="login" type="text" placeholder="Login" />
+        <InputText
+          name="password"
+          type="password"
+          placeholder="Пароль"
+          :formControl="{ validateOnBlur: true }"
+        />
 
         <Message v-if="$form.login?.invalid" severity="error" size="small" variant="simple">{{
           $form.login.error?.message
         }}</Message>
       </div>
-      <Button type="submit" severity="secondary" label="Submit" />
     </Form>
   </div>
 </template>

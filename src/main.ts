@@ -5,7 +5,7 @@ import { createPinia } from 'pinia'
 import PrimeVue from 'primevue/config'
 import Aura from '@primeuix/themes/aura'
 import ToastService from 'primevue/toastservice'
-import { Button, InputText, Message } from 'primevue'
+import { Button, InputText, Message, Select } from 'primevue'
 import { Form } from '@primevue/forms'
 
 import App from './App.vue'
@@ -16,6 +16,7 @@ app.component('Button', Button)
 app.component('InputText', InputText)
 app.component('Form', Form)
 app.component('Message', Message)
+app.component('PSelect', Select)
 
 app.use(createPinia())
 app.use(PrimeVue, {

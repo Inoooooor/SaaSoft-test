@@ -7,7 +7,4 @@ const counter = useCounterStore()
 
 <template>
   <profile-form />
-  <div>count: {{ counter.count }}</div>
-  <div>doubleCount: {{ counter.doubleCount }}</div>
-  <button @click="counter.increment">increment</button>
 </template>
