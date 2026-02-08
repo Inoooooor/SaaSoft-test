@@ -28,13 +28,13 @@
       <div class="flex flex-col gap-1">
         <ifta-label>
           <p-select
-            id="profileType"
-            name="profileType"
+            id="type"
+            name="type"
             :options="['LSAP', 'Локальная']"
             :formControl="{ validateOnValueUpdate: true }"
             class="w-40"
           />
-          <label for="profileType">Тип записи</label>
+          <label for="type">Тип записи</label>
         </ifta-label>
 
         <Message v-if="$form.login?.invalid" severity="error" size="small" variant="simple">{{
@@ -58,18 +58,17 @@
       </div>
       <div class="flex flex-col gap-1">
         <ifta-label>
+          <password input-id="password" name="password" type="password" :feedback="false" />
           <label for="password">Пароль</label>
-          <InputText
-            name="password"
-            type="password"
-            placeholder="Пароль"
-            :formControl="{ validateOnBlur: true }"
-          />
         </ifta-label>
 
         <Message v-if="$form.login?.invalid" severity="error" size="small" variant="simple">{{
           $form.login.error?.message
         }}</Message>
+      </div>
+      <p-button type="submit">submit</p-button>
+      <div>
+        <pre> form: {{ $form }}</pre>
       </div>
     </Form>
   </div>
@@ -78,16 +77,29 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import type { Profile } from '@/models'
+import type { FormSubmitEvent } from '@primevue/forms/form'
 import { useToast } from 'primevue/usetoast'
 
-interface ProfileForm extends Omit<Profile, 'password'> {
+// const $form = reactive({})
+interface ProfileForm extends Omit<Profile, 'password' | 'tags'> {
   password: string
+  tags: string
 }
 
 const toast = useToast()
 
-const initialValues = reactive({
+const initialValues = reactive<ProfileForm>({
+  tags: '',
+  type: 'Локальная',
   login: '',
+  password: '',
+})
+
+const data = reactive<ProfileForm>({
+  tags: '',
+  type: 'Локальная',
+  login: '',
+  password: '',
 })
 
 const resolver = ({ values }: { values: ProfileForm }) => {
@@ -103,8 +115,9 @@ const resolver = ({ values }: { values: ProfileForm }) => {
   }
 }
 
-const onFormSubmit = ({ valid }: { valid: boolean }) => {
-  if (valid) {
+const onFormSubmit = (e: FormSubmitEvent) => {
+  console.log(e)
+  if (e.valid) {
     toast.add({
       severity: 'success',
       summary: 'Form is submitted.',
