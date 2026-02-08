@@ -4,11 +4,16 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import PrimeVue from 'primevue/config'
 import Aura from '@primeuix/themes/aura'
+import ToastService from 'primevue/toastservice'
+import { Button, InputText, Message } from 'primevue'
 
 import App from './App.vue'
-import { option } from '@primeuix/themes/aura/autocomplete'
 
 const app = createApp(App)
+
+app.component('Button', Button)
+app.component('InputText', InputText)
+app.component('Message', Message)
 
 app.use(createPinia())
 app.use(PrimeVue, {
@@ -19,5 +24,6 @@ app.use(PrimeVue, {
     },
   },
 })
+app.use(ToastService)
 
 app.mount('#app')
